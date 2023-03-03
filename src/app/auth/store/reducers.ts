@@ -1,16 +1,31 @@
 import {AuthStateInterface} from "../types/authState.interface";
 import {Action, createReducer, on} from "@ngrx/store";
-import {singUpAction} from "./actions/sing-up.action";
+import {singUpAction, singUpFailureAction, singUpSuccessAction} from "./actions/sing-up.action";
 
 const initialState: AuthStateInterface = {
-  isSubmitting: false
+  isSubmitting: false,
+  currentUser: null,
+  isLoggedIn: null,
+  validationErrors: null
 };
 
 const authReducer = createReducer(
   initialState,
   on(singUpAction, (state): AuthStateInterface => ({
     ...state,
-    isSubmitting: true
+    isSubmitting: true,
+    validationErrors: null
+  })),
+  on(singUpSuccessAction, (state, action): AuthStateInterface => ({
+    ...state,
+    isSubmitting: false,
+    isLoggedIn: true,
+    currentUser: action.currentUser
+  })),
+  on(singUpFailureAction, (state, action): AuthStateInterface => ({
+    ...state,
+    isSubmitting: false,
+    validationErrors: action.errors
   }))
 );
 

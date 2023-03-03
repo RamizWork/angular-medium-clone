@@ -4,6 +4,7 @@ import {singUpAction, singUpFailureAction, singUpSuccessAction} from "../actions
 import {catchError, map, of, switchMap} from "rxjs";
 import {AuthService} from "../../services/auth.service";
 import {CurrentUserInterface} from "../../../shared/types/currentUser.interface";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Injectable()
 export class SingUpEffect {
@@ -15,8 +16,8 @@ export class SingUpEffect {
           map((currentUser: CurrentUserInterface) => {
             return singUpSuccessAction({currentUser})
           }),
-          catchError(() => {
-            return of(singUpFailureAction())
+          catchError((errorResponse: HttpErrorResponse) => {
+            return of(singUpFailureAction({errors: errorResponse.error.errors}))
           })
         )
       })
