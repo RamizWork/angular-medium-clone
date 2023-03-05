@@ -4,9 +4,10 @@ import {select, Store} from "@ngrx/store";
 import {singUpAction} from "../../store/actions/sing-up.action";
 import {Observable} from "rxjs";
 import {AppStateInterface} from "../../../shared/types/appState.interface";
-import {isSubmittingSelector} from "../../store/selectors";
+import {isSubmittingSelector, validationErrorsSelector} from "../../store/selectors";
 import {AuthService} from "../../services/auth.service";
 import {SingUpRequestInterface} from "../../types/sing-upRequest.interface";
+import {BackendErrorsInterface} from "../../../shared/types/backendErrors.interface";
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ import {SingUpRequestInterface} from "../../types/sing-upRequest.interface";
 export class RegisterComponent implements OnInit {
   form!: FormGroup;
   isSubmitting$!: Observable<boolean>;
+  backendErrors$!: Observable<BackendErrorsInterface | null>
 
   constructor(private authService: AuthService, private store: Store<AppStateInterface>) {
   }
@@ -27,6 +29,7 @@ export class RegisterComponent implements OnInit {
 
   initializeValues(): void {
     this.isSubmitting$ = this.store.pipe(select(isSubmittingSelector));
+    this.backendErrors$ = this.store.pipe(select(validationErrorsSelector));
   }
 
   initializeForm(): void {

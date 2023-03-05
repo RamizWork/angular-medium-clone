@@ -8,6 +8,7 @@ import {reducers} from "./store/reducers";
 import {AuthService} from "./services/auth.service";
 import {EffectsModule} from "@ngrx/effects";
 import {SingUpEffect} from "./store/effects/sing-up.effect";
+import {BackendErrorMessagesModule} from "../shared/modules/backendErrorMessages/backendErrorMessages.module";
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
+    BackendErrorMessagesModule,
     StoreModule.forFeature('auth', reducers),
     EffectsModule.forFeature([SingUpEffect])
   ],
